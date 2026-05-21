@@ -1,0 +1,27 @@
+print("\n\n PART 4 — Data Analysis")
+print("-" * 40)
+
+df["average_score"] = (df["math_score"] + df["science_score"]) / 2
+print(" New column 'average_score' created:")
+print(df[["name", "math_score", "science_score", "average_score"]].head())
+
+print("\n Top 5 Students based on average_score:")
+top5 = df.nlargest(5, "average_score")[["name", "math_score", "science_score", "average_score"]]
+print(top5.to_string(index=False))
+
+print("\n Correlation between attendance and scores:")
+corr_math = df["attendance"].corr(df["math_score"])
+corr_science = df["attendance"].corr(df["science_score"])
+corr_avg = df["attendance"].corr(df["average_score"])
+print(f"   Attendance vs Math Score    : {corr_math:.4f}")
+print(f"   Attendance vs Science Score : {corr_science:.4f}")
+print(f"   Attendance vs Average Score : {corr_avg:.4f}")
+print("   (1 = perfect positive, 0 = no relation, -1 = opposite)")
+
+print("\n Average marks grouped by Gender:")
+gender_group = df.groupby("gender")[["math_score", "science_score", "average_score"]].mean().round(2)
+print(gender_group)
+ 
+print("\n" + "=" * 60)
+print(" ALL PARTS COMPLETED SUCCESSFULLY!")
+print("=" * 60)
