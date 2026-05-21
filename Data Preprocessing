@@ -1,0 +1,49 @@
+print("\n\n PART 3 — Data Preprocessing")
+print("-" * 40)
+
+print(" Before handling missing values:")
+print(f"   math_score NaN count    : {df['math_score'].isnull().sum()}")
+print(f"   science_score NaN count : {df['science_score'].isnull().sum()}")
+
+df["math_score"] = df["math_score"].fillna(df["math_score"].mean())
+df["science_score"] = df["science_score"].fillna(df["science_score"].mean())
+ 
+print(" After handling missing values (filled with column mean):")
+print(f"   math_score NaN count    : {df['math_score'].isnull().sum()}")
+print(f"   science_score NaN count : {df['science_score'].isnull().sum()}")
+
+print("\n Converting exam_date to datetime format...")
+print("   Before:", df["exam_date"].unique())
+
+df["exam_date"] = pd.to_datetime(df["exam_date"], format="mixed", dayfirst=True, errors="coerce")
+ 
+print("   After :", df["exam_date"].unique())
+print("   dtype  :", df["exam_date"].dtype)
+
+print("\n Detecting outliers using IQR method...")
+ 
+def handle_outliers(df, column):
+    Q1 = df[column].quantile(0.25)           # 25th percentile
+    Q3 = df[column].quantile(0.75)           # 75th percentile
+    IQR = Q3 - Q1                            # Interquartile Range
+    lower = Q1 - 1.5 * IQR                  # Lower fence
+    upper = Q3 + 1.5 * IQR                  # Upper fence
+ 
+    outliers = df[(df[column] < lower) | (df[column] > upper)]
+    print(f"\n   [{column}] Q1={Q1}, Q3={Q3}, IQR={IQR}")
+    print(f"   Valid range: {lower:.2f} to {upper:.2f}")
+ 
+    if not outliers.empty:
+        print(f" Outliers found:\n{outliers[['name', column]]}")
+    else:
+        print(f" No outliers found")
+ 
+    df[column] = df[column].clip(lower=lower, upper=upper)
+    return df
+ 
+df = handle_outliers(df, "math_score")
+df = handle_outliers(df, "science_score")
+
+print(f"\n Duplicate rows found: {df.duplicated().sum()}")
+df = df.drop_duplicates()
+print(f"   After removing duplicates, dataset has {len(df)} rows")
