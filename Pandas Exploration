@@ -1,22 +1,17 @@
 print("\n\n PART 2 — Pandas Exploration")
 print("-" * 40)
- 
-# Load dataset
+
 df = pd.read_csv("students.csv")
- 
-# First 5 rows
+
 print(" First 5 rows of the dataset:")
 print(df.head())
- 
-# Data types
+
 print("\n Data types of all columns:")
 print(df.dtypes)
- 
-# Missing values
+
 print("\n Total missing values in each column:")
 print(df.isnull().sum())
- 
-# Students with attendance below 70%
+
 print("\n Students with attendance below 70%:")
 low_attendance = df[df["attendance"] < 70]
 print(low_attendance[["name", "attendance"]])
