@@ -1,0 +1,25 @@
+import numpy as np
+import pandas as pd
+ 
+print("=" * 60)
+print("   DATA PREPROCESSING USING NumPy & Pandas - SOLUTION")
+print("=" * 60)
+
+print("\n PART 1 — NumPy Operations")
+print("-" * 40)
+
+df_raw = pd.read_csv("students.csv")
+
+math_array = np.array(df_raw["math_score"].dropna())
+ 
+print("NumPy array from math_score column:")
+print(math_array)
+ 
+print(f"\n Mean   : {np.mean(math_array):.2f}")
+print(f" Median : {np.median(math_array):.2f}")
+print(f" Maximum: {np.max(math_array)}")
+print(f" Minimum: {np.min(math_array)}")
+
+normalized = (math_array - np.min(math_array)) / (np.max(math_array) - np.min(math_array))
+print(f"\n Normalized math_scores (0 to 1 scale):")
+print(np.round(normalized, 4))
